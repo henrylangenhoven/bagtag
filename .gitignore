@@ -45,3 +45,6 @@ Thumbs.db
 .firebase/bagtag-lang
 firebase-debug.log
 *.cache
+
+# Project files
+/src/environments/*
