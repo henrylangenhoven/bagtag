@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "bagtag-lang"
+  },
+  "targets": {
+    "bagtag-lang": {
+      "hosting": {
+        "bagtag": [
+          "bagtag-lang"
+        ]
+      }
+    }
   }
 }
