@@ -8,6 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:headless": "ng test --watch=false --browsers=ChromeHeadless",
+    "format:check": "prettier --config ./.prettierrc --list-different .",
+    "format:all": "npx prettier --config ./.prettierrc --write . --check",
+    "format:src": "npx prettier --config ./.prettierrc --write ./src --check",
     "deploy": "ng deploy",
     "prepare": "husky"
   },
