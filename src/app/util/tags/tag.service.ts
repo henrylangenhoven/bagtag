@@ -11,6 +11,7 @@ const TAGS_COLLECTION = 'tags';
   providedIn: 'root',
 })
 export class TagService {
+  // TODO: Add FirestoreService as a dependency and remove the Firestore import
   firestoreService: FirestoreService = inject(FirestoreService);
   private firestore: Firestore = inject(Firestore);
   private tagsCollection = collection(this.firestore, 'items'); //TAGS_COLLECTION);
@@ -25,7 +26,7 @@ export class TagService {
     const tagsCollection = collection(this.firestore, 'items'); //TAGS_COLLECTION);
     const newTag: Tag = {
       name: name,
-      url: window.location.origin + TAGS_PATH + Math.floor(Math.random() * 100),
+      url: name,
     };
 
     return addDoc(tagsCollection, newTag);
