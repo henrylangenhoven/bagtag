@@ -8,7 +8,11 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:headless": "ng test --watch=false --browsers=ChromeHeadless",
-    "deploy": "ng deploy"
+    "format:check": "prettier --config ./.prettierrc --list-different .",
+    "format:all": "npx prettier --config ./.prettierrc --write . --check",
+    "format:src": "npx prettier --config ./.prettierrc --write ./src --check",
+    "deploy": "ng deploy",
+    "prepare": "husky"
   },
   "private": true,
   "dependencies": {
@@ -31,12 +35,18 @@
     "@angular/cli": "^17.2.3",
     "@angular/compiler-cli": "^17.2.0",
     "@types/jasmine": "~5.1.0",
+    "husky": "^9.0.11",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
     "typescript": "~5.3.2"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown"
   }
 }
