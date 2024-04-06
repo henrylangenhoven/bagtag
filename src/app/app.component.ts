@@ -1,8 +1,8 @@
 import {Component, inject} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
-import {collection, collectionData, Firestore} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
 import {AsyncPipe, NgForOf} from "@angular/common";
+import {FirestoreService} from "./firebase/firestore.service";
 
 @Component({
   selector: 'app-root',
@@ -12,13 +12,10 @@ import {AsyncPipe, NgForOf} from "@angular/common";
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'BagTag';
-
-  firestore: Firestore = inject(Firestore)
+  firestoreService: FirestoreService = inject(FirestoreService)
   items$: Observable<any[]>;
 
   constructor() {
-    const aCollection = collection(this.firestore, 'items')
-    this.items$ = collectionData(aCollection);
+    this.items$ = this.firestoreService.getItems();
   }
 }
