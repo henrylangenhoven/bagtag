@@ -19,4 +19,6 @@ export class FirestoreService {
   getItems(): Observable<any[]> {
     return this.items$;
   }
+
+  //    TODO: make this generic and remove Firestore dependency from TagService
 }

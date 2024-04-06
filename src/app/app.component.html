@@ -1,13 +1,11 @@
-<h1>Items</h1>
+<h1>My QR Codes</h1>
+<input type="text" [(ngModel)]="tagName" placeholder="Enter tag name" />
+<button (click)="addTag()">Add Tag</button>
 <ul>
   <li class="text" *ngFor="let item of items$ | async">
     {{ item.name }}
     <app-qr-code dataString="{{ item.name }}"></app-qr-code>
   </li>
 </ul>
-
-<h1>QR Code</h1>
-<app-qr-code [dataString]="'Hallo 👋'"></app-qr-code>
-<app-qr-code [dataString]="'Fucking A!'"></app-qr-code>
 
 <router-outlet></router-outlet>

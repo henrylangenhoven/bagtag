@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { MockProvider } from 'ng-mocks';
 import { FirestoreService } from './firebase/firestore.service';
 import { of, throwError } from 'rxjs';
+import { TagService } from './util/tags/tag.service';
 
 describe('AppComponent', () => {
   let firestoreService: FirestoreService;
@@ -10,7 +11,7 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [MockProvider(FirestoreService)],
+      providers: [MockProvider(FirestoreService), MockProvider(TagService)],
     }).compileComponents();
 
     firestoreService = TestBed.inject(FirestoreService);
