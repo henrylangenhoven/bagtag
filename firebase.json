@@ -4,6 +4,7 @@
     "indexes": ".firebase/firestore.indexes.json"
   },
   "hosting": {
+    "target": "bagtag",
     "source": ".",
     "ignore": [
       "firebase.json",
