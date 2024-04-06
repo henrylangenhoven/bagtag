@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "BagTag": {
+    "bagtag": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -62,10 +62,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "BagTag:build:production"
+              "buildTarget": "bagtag:build:production"
             },
             "development": {
-              "buildTarget": "BagTag:build:development"
+              "buildTarget": "bagtag:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -73,7 +73,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "BagTag:build"
+            "buildTarget": "bagtag:build"
           }
         },
         "test": {
@@ -94,6 +94,23 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "bagtag:build:production",
+              "serveTarget": "bagtag:serve:production"
+            },
+            "development": {
+              "buildTarget": "bagtag:build:development",
+              "serveTarget": "bagtag:serve:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
