@@ -1,4 +1,6 @@
 <h1>My QR Codes</h1>
+<input type="text" [(ngModel)]="tagName" placeholder="Enter tag name" />
+<button (click)="addTag()">Add Tag</button>
 <ul>
   <li class="text" *ngFor="let item of items$ | async">
     {{ item.name }}
