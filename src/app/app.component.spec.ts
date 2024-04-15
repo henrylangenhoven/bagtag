@@ -2,8 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { MockProvider } from 'ng-mocks';
 import { of, throwError } from 'rxjs';
-import { TagService } from './util/tags/tag.service';
-import { Tag } from './util/tags/tag.model';
+import { TagService } from '@app/utils/tags/tag.service';
+import { Tag } from '@app/utils/tags/tag.model';
+import { ActivatedRoute } from '@angular/router';
 
 describe('AppComponent', () => {
   let tagService: TagService;
@@ -11,7 +12,16 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [MockProvider(TagService)],
+      providers: [
+        MockProvider(TagService),
+        MockProvider(ActivatedRoute, {
+          snapshot: {
+            paramMap: {
+              get: () => 'mock-id', // mock value
+            },
+          },
+        } as unknown as ActivatedRoute),
+      ],
     }).compileComponents();
 
     tagService = TestBed.inject(TagService);
