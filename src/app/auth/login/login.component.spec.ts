@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@app/firebase/auth/auth.service';
 import { LoginComponent } from '@app/auth/login/login.component';
+import { MockProvider } from 'ng-mocks';
+import { ActivatedRoute } from '@angular/router';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -13,7 +15,16 @@ describe('LoginComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
-      providers: [{ provide: AuthService, useValue: authServiceMock }],
+      providers: [
+        { provide: AuthService, useValue: authServiceMock },
+        MockProvider(ActivatedRoute, {
+          snapshot: {
+            paramMap: {
+              get: () => 'mock-id', // mock value
+            },
+          },
+        } as unknown as ActivatedRoute),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);

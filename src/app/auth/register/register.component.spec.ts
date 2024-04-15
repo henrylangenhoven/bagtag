@@ -3,6 +3,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@app/firebase/auth/auth.service';
 import { RegisterComponent } from './register.component';
 import { of } from 'rxjs';
+import { MockProvider } from 'ng-mocks';
+import { ActivatedRoute } from '@angular/router';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -14,7 +16,16 @@ describe('RegisterComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
-      providers: [{ provide: AuthService, useValue: authServiceMock }],
+      providers: [
+        { provide: AuthService, useValue: authServiceMock },
+        MockProvider(ActivatedRoute, {
+          snapshot: {
+            paramMap: {
+              get: () => 'mock-id', // mock value
+            },
+          },
+        } as unknown as ActivatedRoute),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RegisterComponent);

@@ -14,7 +14,7 @@ export class LogoutComponent {
   logOut() {
     this.authService
       .signOut()
-      .then((r: void) => console.log(r))
+      .then(() => this.authService.redirectToLogin())
       .catch((e: any) => console.error(e));
   }
 }

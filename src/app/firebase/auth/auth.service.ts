@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,10 @@ import { Observable } from 'rxjs';
 export class AuthService {
   currentUser$: Observable<any>;
 
-  constructor(private afAuth: AngularFireAuth) {
+  constructor(
+    private afAuth: AngularFireAuth,
+    private router: Router
+  ) {
     this.currentUser$ = this.afAuth.authState;
   }
 
@@ -22,5 +26,13 @@ export class AuthService {
 
   signOut() {
     return this.afAuth.signOut();
+  }
+
+  redirectToLogin() {
+    this.router.navigate(['/login']);
+  }
+
+  redirectToHome() {
+    this.router.navigate(['/']);
   }
 }
