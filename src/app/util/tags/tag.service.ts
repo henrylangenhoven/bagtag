@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Tag } from './tag.model';
 import { FirestoreService } from '../../firebase/firestore.service';
-import { BagTagCollectionsEnum } from '../../firebase/bagTag.collections.enum';
+import { BagTagCollections } from '../../firebase/bagTagCollections';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class TagService {
   tags$: Observable<Tag[]>;
 
   constructor() {
-    this.tags$ = this.firestoreService.getCollectionData(BagTagCollectionsEnum.TAGS) as Observable<Tag[]>;
+    this.tags$ = this.firestoreService.getCollectionData(BagTagCollections.TAGS) as Observable<Tag[]>;
   }
 
   addTag(name: string = 'New Tag') {
@@ -20,7 +20,7 @@ export class TagService {
       name: name,
       url: name,
     };
-    return this.firestoreService.save(BagTagCollectionsEnum.TAGS, newTag);
+    return this.firestoreService.save(BagTagCollections.TAGS, newTag);
   }
 
   getTags() {
@@ -28,6 +28,6 @@ export class TagService {
   }
 
   deleteTag(id: string) {
-    return this.firestoreService.delete(BagTagCollectionsEnum.TAGS, id);
+    return this.firestoreService.delete(BagTagCollections.TAGS, id);
   }
 }

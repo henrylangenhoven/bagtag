@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, getDoc } from '@angular/fire/firestore';
-import { BagTagCollectionsEnum } from './bagTag.collections.enum';
+import { BagTagCollections } from './bagTagCollections';
 import { DocumentReference } from '@firebase/firestore';
 
 @Injectable({
@@ -11,21 +11,18 @@ export class FirestoreService {
 
   constructor() {}
 
-  save(
-    firestoreCollection: BagTagCollectionsEnum = BagTagCollectionsEnum.TAGS,
-    payload: any
-  ): Promise<DocumentReference<any>> {
+  save(firestoreCollection: BagTagCollections = BagTagCollections.TAGS, payload: any): Promise<DocumentReference<any>> {
     const collectionReference = collection(this.firestore, firestoreCollection); //TAGS_COLLECTION);
 
     return addDoc(collectionReference, payload);
   }
 
-  getCollectionData(bagTagCollection: BagTagCollectionsEnum) {
+  getCollectionData(bagTagCollection: BagTagCollections) {
     let collectionReference = collection(this.firestore, bagTagCollection);
     return collectionData(collectionReference, { idField: 'id' });
   }
 
-  async getDocument(afCollection: BagTagCollectionsEnum, id: string) {
+  async getDocument(afCollection: BagTagCollections, id: string) {
     // TODO: test and implement
     let documentReference = doc(this.firestore, `/${afCollection}/`, id);
     let documentSnapshot = await getDoc(documentReference);
@@ -38,12 +35,12 @@ export class FirestoreService {
     }
   }
 
-  delete(afCollection: BagTagCollectionsEnum, id: string) {
+  delete(afCollection: BagTagCollections, id: string) {
     let documentReference = doc(this.firestore, `/${afCollection}/`, id);
     return deleteDoc(documentReference);
   }
 
-  private getCollection(bagTagCollection: BagTagCollectionsEnum) {
+  private getCollection(bagTagCollection: BagTagCollections) {
     return collection(this.firestore, bagTagCollection);
   }
 }
