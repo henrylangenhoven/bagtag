@@ -1,42 +1,33 @@
 import { inject, Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, Firestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Tag } from './tag.model';
 import { FirestoreService } from '../../firebase/firestore.service';
-
-const TAGS_PATH = '/tag/';
-const TAGS_COLLECTION = 'tags';
+import { BagTagCollectionsEnum } from '../../firebase/bagTag.collections.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TagService {
-  // TODO: Add FirestoreService as a dependency and remove the Firestore import
   firestoreService: FirestoreService = inject(FirestoreService);
-  private firestore: Firestore = inject(Firestore);
-  private tagsCollection = collection(this.firestore, 'items'); //TAGS_COLLECTION);
-
   tags$: Observable<Tag[]>;
 
   constructor() {
-    this.tags$ = collectionData(this.tagsCollection) as Observable<Tag[]>;
+    this.tags$ = this.firestoreService.getCollectionData(BagTagCollectionsEnum.TAGS) as Observable<Tag[]>;
   }
 
   addTag(name: string = 'New Tag') {
-    const tagsCollection = collection(this.firestore, 'items'); //TAGS_COLLECTION);
     const newTag: Tag = {
       name: name,
       url: name,
     };
-
-    return addDoc(tagsCollection, newTag);
+    return this.firestoreService.save(BagTagCollectionsEnum.TAGS, newTag);
   }
 
   getTags() {
-    return collectionData(this.tagsCollection) as Observable<Tag[]>;
+    return this.tags$;
   }
 
-  deleteTag() {
-    return;
+  deleteTag(id: string) {
+    return this.firestoreService.delete(BagTagCollectionsEnum.TAGS, id);
   }
 }

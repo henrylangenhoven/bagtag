@@ -12,7 +12,8 @@
     "format:all": "npx prettier --config ./.prettierrc --write . --check",
     "format:src": "npx prettier --config ./.prettierrc --write ./src --check",
     "deploy": "ng deploy",
-    "prepare": "husky"
+    "prepare": "husky",
+    "npm i": "npm install"
   },
   "private": true,
   "dependencies": {
