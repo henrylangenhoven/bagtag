@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Tag } from './tag.model';
-import { FirestoreService } from '../../firebase/firestore.service';
-import { BagTagCollections } from '../../firebase/bagTagCollections';
+import { FirestoreService } from '../../firebase/firestore/firestore.service';
+import { BagTagCollections } from '../../firebase/firestore/bagTagCollections';
 
 @Injectable({
   providedIn: 'root',
