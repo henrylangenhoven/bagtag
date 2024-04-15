@@ -22,14 +22,8 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       this.authService
         .signUp(this.registerForm.value.email!!, this.registerForm.value.password!!)
-        .then(() => {
-          // Handle successful registration here
-          console.log('Registration successful');
-        })
-        .catch(error => {
-          // Handle registration error here
-          console.error(error);
-        });
+        .then(() => this.authService.redirectToHome())
+        .catch(error => console.error(error));
     }
   }
 }

@@ -22,12 +22,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService
         .signIn(this.loginForm.value.email!!, this.loginForm.value.password!!)
-        .then((result: any) => {
-          console.log(result);
-        })
-        .catch((error: any) => {
-          console.error(error);
-        });
+        .then(() => this.authService.redirectToHome())
+        .catch((error: any) => console.error(error));
     }
   }
 }
