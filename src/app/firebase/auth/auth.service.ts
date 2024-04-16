@@ -2,18 +2,25 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import firebase from 'firebase/compat';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  currentUser$: Observable<any>;
+  currentUser$: Observable<firebase.User | null>;
+  currentUserId: string | undefined;
 
   constructor(
     private afAuth: AngularFireAuth,
     private router: Router
   ) {
     this.currentUser$ = this.afAuth.authState;
+
+    this.currentUser$.pipe(takeUntilDestroyed()).subscribe(user => {
+      this.currentUserId = user?.uid;
+    });
   }
 
   signIn(email: string, password: string) {
@@ -25,6 +32,7 @@ export class AuthService {
   }
 
   signOut() {
+    this.currentUserId = undefined;
     return this.afAuth.signOut();
   }
 

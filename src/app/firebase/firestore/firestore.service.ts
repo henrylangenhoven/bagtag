@@ -1,25 +1,48 @@
-import { inject, Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { Injectable } from '@angular/core';
+import {
+  addDoc,
+  collection,
+  collectionData,
+  deleteDoc,
+  doc,
+  Firestore,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+} from '@angular/fire/firestore';
 import { BagTagCollections } from './bagTagCollections';
 import { DocumentReference } from '@firebase/firestore';
+import { AuthService } from '@app/firebase/auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirestoreService {
-  private firestore: Firestore = inject(Firestore);
-
-  constructor() {}
+  constructor(
+    private firestore: Firestore,
+    private authService: AuthService
+  ) {}
 
   save(firestoreCollection: BagTagCollections = BagTagCollections.TAGS, payload: any): Promise<DocumentReference<any>> {
     const collectionReference = collection(this.firestore, firestoreCollection); //TAGS_COLLECTION);
-
+    payload.ownerId = this.authService.currentUserId;
     return addDoc(collectionReference, payload);
   }
 
   getCollectionData(bagTagCollection: BagTagCollections) {
     let collectionReference = collection(this.firestore, bagTagCollection);
     return collectionData(collectionReference, { idField: 'id' });
+  }
+
+  getCollectionSnapshotData(bagTagCollection: BagTagCollections) {
+    const collectionReference = collection(this.firestore, bagTagCollection);
+    const q = query(collectionReference, where('ownerId', '==', this.authService.currentUserId));
+
+    return onSnapshot(q, snapshot => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log(data);
+    });
   }
 
   async getDocument(afCollection: BagTagCollections, id: string) {

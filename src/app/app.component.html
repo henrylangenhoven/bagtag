@@ -1,23 +1,9 @@
-<h1>Links:</h1>
 <ul>
-  <li><a routerLink="/login">Login</a></li>
-  <li><a routerLink="/logout">Logout</a></li>
-  <li><a routerLink="/register">Register</a></li>
-  <li><a routerLink="/profile">Profile</a></li>
+  <li *ngIf="!currentUserId"><a routerLink="/login">Login</a></li>
+  <li *ngIf="currentUserId"><a routerLink="/logout">Logout</a></li>
+  <li *ngIf="!currentUserId"><a routerLink="/register">Register</a></li>
+  <li *ngIf="currentUserId"><a routerLink="/profile">Profile</a></li>
+  <li *ngIf="currentUserId"><a routerLink="/tags">Tags</a></li>
 </ul>
 
-<h1>Router:</h1>
 <router-outlet></router-outlet>
-<hr />
-
-<h1>My QR Codes</h1>
-<input type="text" [(ngModel)]="tagName" placeholder="Enter tag name" />
-<button (click)="addTag()">Add Tag</button>
-<ul>
-  <li class="text" *ngFor="let tag of tags$ | async">
-    {{ tag.name }}
-    <app-qr-code dataString="{{ tag.name }}"></app-qr-code>
-
-    <button (click)="deleteTag(tag.id)">x</button>
-  </li>
-</ul>
