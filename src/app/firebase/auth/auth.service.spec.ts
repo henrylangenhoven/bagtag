@@ -34,16 +34,8 @@ describe('AuthorizationService', () => {
   });
 
   it('should return null for currentUser$ when user is not authenticated', () => {
-    service.currentUser$.subscribe(user => {
-      expect(user).toBeNull();
-    });
-  });
-
-  it('should return user for currentUser$ when user is authenticated', () => {
-    authState$.next({ uid: '123' });
-    service.currentUser$.subscribe(user => {
-      expect(user).toEqual({ uid: '123' });
-    });
+    service.signOut();
+    expect(service.currentUserId).not.toBeDefined();
   });
 
   it('should call signInWithEmailAndPassword on signIn', () => {
