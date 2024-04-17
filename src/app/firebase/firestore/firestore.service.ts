@@ -14,6 +14,8 @@ import {
 import { BagTagCollections } from './bagTagCollections';
 import { DocumentReference } from '@firebase/firestore';
 import { AuthService } from '@app/firebase/auth/auth.service';
+import { Observable } from 'rxjs';
+import { BagTagFirestoreDocument } from '@app/firebase/firestore/bagTagFirestoreDocument';
 
 @Injectable({
   providedIn: 'root',
@@ -35,13 +37,15 @@ export class FirestoreService {
     return collectionData(collectionReference, { idField: 'id' });
   }
 
-  getCollectionSnapshotData(bagTagCollection: BagTagCollections) {
+  getCollectionDataForCurrentUser(bagTagCollection: BagTagCollections): Observable<BagTagFirestoreDocument[]> {
     const collectionReference = collection(this.firestore, bagTagCollection);
     const q = query(collectionReference, where('ownerId', '==', this.authService.currentUserId));
 
-    return onSnapshot(q, snapshot => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      console.log(data);
+    return new Observable(observer => {
+      return onSnapshot(q, snapshot => {
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        observer.next(data); // Emit the data
+      });
     });
   }
 
