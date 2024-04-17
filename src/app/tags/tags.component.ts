@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { AsyncPipe, NgForOf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QrCodeComponent } from '@utils/qr-code/qr-code/qr-code.component';
@@ -14,12 +14,10 @@ import { Tag } from '@utils/tags/tag.model';
   styleUrl: './tags.component.scss',
 })
 export class TagsComponent {
-  private tagService: TagService = inject(TagService);
-
   tags$: Observable<Tag[]>;
   tagName: string = 'New Tag';
 
-  constructor() {
+  constructor(private tagService: TagService) {
     this.tags$ = this.tagService.getTags();
   }
 
