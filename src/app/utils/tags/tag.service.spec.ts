@@ -1,66 +1,74 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
 import { TagService } from './tag.service';
 import { FirestoreService } from '@app/firebase/firestore/firestore.service';
-import { DocumentReference } from '@firebase/firestore';
-import { BagTagFirestoreDocument } from '@app/firebase/firestore/bagTagFirestoreDocument';
-import { Tag } from '@utils/tags/tag.model';
+import { AuthService } from '@app/firebase/auth/auth.service';
+import { BehaviorSubject, of } from 'rxjs';
+import { BagTagCollections } from '@app/firebase/firestore/bagTagCollections';
 
 describe('TagService', () => {
   let service: TagService;
-  let firestoreServiceSpy: jasmine.SpyObj<FirestoreService>;
+  let firestoreServiceMock: any;
+  let authServiceMock: any;
 
   beforeEach(() => {
-    firestoreServiceSpy = jasmine.createSpyObj('FirestoreService', [
-      'getCollectionSnapshotData',
-      'getCollectionDataForCurrentUser',
-      'save',
-      'delete',
-    ]);
+    firestoreServiceMock = {
+      getCollectionDataForUser: jasmine.createSpy().and.returnValue(of([])),
+      save: jasmine.createSpy(),
+      delete: jasmine.createSpy().and.returnValue(of({})),
+    };
 
-    // Mock getCollectionDataForCurrentUser to return an Observable
-    firestoreServiceSpy.getCollectionDataForCurrentUser.and.returnValue(of([]));
+    authServiceMock = {
+      currentUserId$: new BehaviorSubject<string | undefined>(undefined),
+    };
 
     TestBed.configureTestingModule({
-      providers: [TagService, { provide: FirestoreService, useValue: firestoreServiceSpy }],
+      providers: [
+        TagService,
+        { provide: FirestoreService, useValue: firestoreServiceMock },
+        { provide: AuthService, useValue: authServiceMock },
+      ],
     });
 
     service = TestBed.inject(TagService);
   });
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
 
-  xit('should fetch tags on creation', done => {
-    // Add done callback
-    const tagData: BagTagFirestoreDocument[] = [{ id: 'tag1', ownerId: 'owner1' }];
-    firestoreServiceSpy.getCollectionDataForCurrentUser.and.returnValue(of(tagData));
+  describe('Handling User Authentication', () => {
+    it('should reset tags when user logs out (userId becomes undefined)', () => {
+      authServiceMock.currentUserId$.next(undefined);
+      expect(firestoreServiceMock.getCollectionDataForUser).not.toHaveBeenCalled();
+      service.getTagsForCurrentUser().subscribe(tags => {
+        expect(tags).toEqual([]);
+      });
+    });
 
-    service.getTags().subscribe(tags => {
-      expect(tags).toEqual(tagData as Tag[]);
-      expect(firestoreServiceSpy.getCollectionDataForCurrentUser.calls.count()).toBe(1, 'one call');
-      done(); // Call done when the asynchronous operation has completed
+    it('should load tags when user logs in', () => {
+      const mockTags = [{ name: 'Tag1', url: 'url1', ownerId: 'user1' }];
+      firestoreServiceMock.getCollectionDataForUser.and.returnValue(of(mockTags));
+      authServiceMock.currentUserId$.next('user1');
+      service.getTagsForCurrentUser().subscribe(tags => {
+        expect(tags).toEqual(mockTags);
+      });
+      expect(firestoreServiceMock.getCollectionDataForUser).toHaveBeenCalledWith(BagTagCollections.TAGS, 'user1');
     });
   });
 
-  it('should add a tag', () => {
-    const newTag = { name: 'New Tag', url: 'New Tag' };
-    const docRef: DocumentReference = {} as DocumentReference; // Create a mock DocumentReference
-    firestoreServiceSpy.save.and.returnValue(Promise.resolve(docRef)); // Return a Promise that resolves to a DocumentReference
-
-    service.addTag().then(() => {
-      expect(firestoreServiceSpy.save.calls.count()).toBe(1, 'one call');
-      expect(firestoreServiceSpy.save.calls.first().args[1]).toEqual(newTag);
+  describe('Test addTagForCurrentUser, getTagsForCurrentUser, and deleteTag Methods', () => {
+    it('should add a new tag', () => {
+      const newTag = { name: 'New Tag', url: 'New Tag', ownerId: 'user1' };
+      authServiceMock.currentUserId$.next('user1');
+      service.addTagForCurrentUser('New Tag');
+      expect(firestoreServiceMock.save).toHaveBeenCalledWith(BagTagCollections.TAGS, newTag);
     });
-  });
 
-  it('should delete a tag', () => {
-    const tagId = 'tagId';
-    firestoreServiceSpy.delete.and.returnValue(Promise.resolve());
+    it('should return the observable of tags', () => {
+      service.getTagsForCurrentUser().subscribe(tags => {
+        expect(tags).toBeInstanceOf(Array);
+      });
+    });
 
-    service.deleteTag(tagId).then(() => {
-      expect(firestoreServiceSpy.delete.calls.count()).toBe(1, 'one call');
-      expect(firestoreServiceSpy.delete.calls.first().args[1]).toBe(tagId);
+    it('should delete a tag', () => {
+      service.deleteTag('tagId1');
+      expect(firestoreServiceMock.delete).toHaveBeenCalledWith(BagTagCollections.TAGS, 'tagId1');
     });
   });
 });

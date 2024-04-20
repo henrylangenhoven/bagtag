@@ -18,11 +18,11 @@ export class TagsComponent {
   tagName: string = 'New Tag';
 
   constructor(private tagService: TagService) {
-    this.tags$ = this.tagService.getTags();
+    this.tags$ = this.tagService.getTagsForCurrentUser();
   }
 
   addTag(name: string = this.tagName) {
-    this.tagService.addTag(name);
+    this.tagService.addTagForCurrentUser(name);
   }
 
   deleteTag(id: string | undefined) {
