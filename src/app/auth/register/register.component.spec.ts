@@ -12,7 +12,13 @@ describe('RegisterComponent', () => {
   let authServiceMock: any;
 
   beforeEach(async () => {
-    authServiceMock = jasmine.createSpyObj('AuthService', ['signIn', 'signUp', 'signOut']);
+    authServiceMock = jasmine.createSpyObj('AuthService', [
+      'signIn',
+      'signUp',
+      'signOut',
+      'redirectToHome',
+      'redirectToLogin',
+    ]);
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
