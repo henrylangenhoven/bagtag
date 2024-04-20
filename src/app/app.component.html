@@ -1,9 +1,18 @@
-<ul>
-  <li *ngIf="!currentUserId"><a routerLink="/login">Login</a></li>
-  <li *ngIf="currentUserId"><a routerLink="/logout">Logout</a></li>
-  <li *ngIf="!currentUserId"><a routerLink="/register">Register</a></li>
-  <li *ngIf="currentUserId"><a routerLink="/profile">Profile</a></li>
-  <li *ngIf="currentUserId"><a routerLink="/tags">Tags</a></li>
-</ul>
+<div class="app-container">
+  <nav *ngIf="currentUserId">
+    <ul>
+      <li><a routerLink="/tags">Tags</a></li>
+      <li class="dropdown">
+        <a href="javascript:void(0)">Profile</a>
+        <div class="dropdown-content">
+          <a routerLink="/profile">View Profile</a>
+          <a routerLink="/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </nav>
 
-<router-outlet></router-outlet>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
