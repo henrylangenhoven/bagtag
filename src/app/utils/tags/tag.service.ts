@@ -1,43 +1,55 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, EMPTY, switchMap } from 'rxjs';
 import { Tag } from './tag.model';
 import { FirestoreService } from '@app/firebase/firestore/firestore.service';
 import { BagTagCollections } from '@app/firebase/firestore/bagTagCollections';
+import { AuthService } from '@app/firebase/auth/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TagService implements OnDestroy {
-  private tagsSubject = new BehaviorSubject<Tag[]>([]);
-  private tags$ = this.tagsSubject.asObservable();
+export class TagService {
+  private tagsForCurrentUserSubject = new BehaviorSubject<Tag[]>([]);
+  private tagsForCurrentUser$ = this.tagsForCurrentUserSubject.asObservable();
 
-  private subscriptions: Subscription[] = [];
-
-  constructor(private firestoreService: FirestoreService) {
-    this.subscriptions.push(
-      this.firestoreService.getCollectionDataForCurrentUser(BagTagCollections.TAGS).subscribe(data => {
-        this.tagsSubject.next(data as Tag[]);
-      })
-    );
+  constructor(
+    private firestoreService: FirestoreService,
+    private authService: AuthService
+  ) {
+    this.authService.currentUserId$
+      .pipe(
+        switchMap(userId => {
+          if (!userId) {
+            // If the user ID is undefined, reset the tags
+            this.tagsForCurrentUserSubject.next([]);
+            return EMPTY;
+          } else {
+            // If the user ID is defined, load the tags for the user
+            return this.firestoreService.getCollectionDataForUser(BagTagCollections.TAGS, userId);
+          }
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe(data => {
+        this.tagsForCurrentUserSubject.next(data as Tag[]);
+      });
   }
 
-  addTag(name: string = 'New Tag') {
+  addTagForCurrentUser(name: string = 'New Tag') {
     const newTag: Tag = {
       name: name,
       url: name,
+      ownerId: this.authService.currentUserId$.value,
     };
     return this.firestoreService.save(BagTagCollections.TAGS, newTag);
   }
 
-  getTags() {
-    return this.tags$;
+  getTagsForCurrentUser() {
+    return this.tagsForCurrentUser$;
   }
 
   deleteTag(id: string) {
     return this.firestoreService.delete(BagTagCollections.TAGS, id);
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

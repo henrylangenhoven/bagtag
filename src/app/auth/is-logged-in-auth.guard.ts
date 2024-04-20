@@ -1,12 +1,11 @@
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, UrlTree } from '@angular/router';
 import { AuthService } from '@app/firebase/auth/auth.service';
 import { inject } from '@angular/core';
-import { map, take } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
-export const isLoggedInAuthGuard: CanActivateFn = (route, state) => {
+export const isLoggedInAuthGuard: CanActivateFn = (route, state): Observable<boolean | UrlTree> => {
   const authService = inject(AuthService);
   return authService.currentUser$.pipe(
-    take(1),
     map(user => {
       if (user) {
         return true;
