@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import firebase from 'firebase/compat';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -10,7 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class AuthService {
   currentUser$: Observable<firebase.User | null>;
-  currentUserId: string | undefined;
+  currentUserId$: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined>(undefined);
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -19,7 +19,7 @@ export class AuthService {
     this.currentUser$ = this.afAuth.authState;
 
     this.currentUser$.pipe(takeUntilDestroyed()).subscribe(user => {
-      this.currentUserId = user?.uid;
+      this.currentUserId$.next(user?.uid);
     });
   }
 
@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   signOut() {
-    this.currentUserId = undefined;
+    this.currentUserId$.next(undefined);
     return this.afAuth.signOut();
   }
 
