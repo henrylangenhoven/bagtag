@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { addDoc, collection, deleteDoc, doc, Firestore, onSnapshot, query, where } from '@angular/fire/firestore';
 import { BagTagCollections } from './bagTagCollections';
 import { DocumentReference } from '@firebase/firestore';
-import { BagTagFirestoreDocument } from '@models/bagTagFirestoreDocument';
+import { BagTagFirestoreDocument } from '@models/bag-tag-firestore-document.model';
 
 @Injectable({
   providedIn: 'root',

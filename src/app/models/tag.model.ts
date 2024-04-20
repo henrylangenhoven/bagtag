@@ -1,4 +1,4 @@
-import { BagTagFirestoreDocument } from './bagTagFirestoreDocument';
+import { BagTagFirestoreDocument } from './bag-tag-firestore-document.model';
 
 export interface Tag extends BagTagFirestoreDocument {
   name?: string;
