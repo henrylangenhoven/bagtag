@@ -5,7 +5,7 @@ import { QrCodeComponent } from '@utils/qr-code/qr-code/qr-code.component';
 import { TagsComponent } from './tags.component';
 import { TagService } from '@utils/tags/tag.service';
 import { Observable, of } from 'rxjs';
-import { Tag } from '@utils/tags/tag.model';
+import { Tag } from '@models/tag.model';
 import { MockComponent } from 'ng-mocks';
 
 describe('TagsComponent', () => {
