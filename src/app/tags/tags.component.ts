@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { QrCodeComponent } from '@utils/qr-code/qr-code/qr-code.component';
 import { TagService } from '@utils/tags/tag.service';
 import { Observable } from 'rxjs';
-import { Tag } from '@models/tag.model';
+import { Tag } from '@models/tag';
 
 @Component({
   selector: 'app-tags',

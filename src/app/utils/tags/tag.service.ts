@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, switchMap } from 'rxjs';
-import { Tag } from '@models/tag.model';
+import { Tag } from '@models/tag';
 import { FirestoreService } from '@app/firebase/firestore/firestore.service';
 import { BagTagCollections } from '@app/firebase/firestore/bagTagCollections';
 import { AuthService } from '@app/firebase/auth/auth.service';

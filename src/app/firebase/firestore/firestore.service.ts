@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { addDoc, collection, deleteDoc, doc, Firestore, onSnapshot, query, where } from '@angular/fire/firestore';
 import { BagTagCollections } from './bagTagCollections';
 import { DocumentReference } from '@firebase/firestore';
-import { BagTagFirestoreDocument } from '@models/bag-tag-firestore-document.model';
+import { BaseFirestoreDocument } from '@models/base-firestore-document';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class FirestoreService {
   getCollectionDataForUser(
     collectionPath: string = BagTagCollections.TAGS,
     userId: string
-  ): Observable<BagTagFirestoreDocument[] | unknown> {
+  ): Observable<BaseFirestoreDocument[] | unknown> {
     const collectionReference = collection(this.firestore, collectionPath);
     const q = query(collectionReference, where('ownerId', '==', userId));
 
@@ -28,8 +28,8 @@ export class FirestoreService {
 
   async save(
     firestoreCollection: BagTagCollections = BagTagCollections.TAGS,
-    payload: BagTagFirestoreDocument
-  ): Promise<DocumentReference<BagTagFirestoreDocument>> {
+    payload: BaseFirestoreDocument
+  ): Promise<DocumentReference<BaseFirestoreDocument>> {
     const collectionReference = collection(this.firestore, firestoreCollection);
     return addDoc(collectionReference, payload);
   }
