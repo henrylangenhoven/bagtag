@@ -9,7 +9,7 @@ import { QRCodeErrorCorrectionLevel, QRCodeModule } from 'angularx-qrcode';
   styleUrl: './qr-code.component.scss',
 })
 export class QrCodeComponent {
-  @Input('dataString') dataString: string = 'Your data string';
+  @Input('dataString') dataString: string | undefined = 'Your data string';
   @Input('errorCorrectionLevel') errorCorrectionLevel: QRCodeErrorCorrectionLevel = 'M';
   @Input('width') width = 256;
 }
