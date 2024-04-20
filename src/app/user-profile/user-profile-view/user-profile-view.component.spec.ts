@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserProfileViewComponent } from './user-profile-view.component';
+import { MockProvider } from 'ng-mocks';
+import { ActivatedRoute } from '@angular/router';
 
 describe('UserProfileViewComponent', () => {
   let component: UserProfileViewComponent;
@@ -9,6 +11,15 @@ describe('UserProfileViewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [UserProfileViewComponent],
+      providers: [
+        MockProvider(ActivatedRoute, {
+          snapshot: {
+            paramMap: {
+              get: () => 'mock-id', // mock value
+            },
+          },
+        } as unknown as ActivatedRoute),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UserProfileViewComponent);

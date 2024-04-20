@@ -5,7 +5,7 @@ import { UserProfile } from '@models/user-profile';
   providedIn: 'root',
 })
 export class UserProfileService {
-  private user: UserProfile = { name: 'John Doe', email: 'john.doe@example.com', password: 'password123' };
+  private user: UserProfile = { name: 'John Doe', email: 'john.doe@example.com', phone: '0824482154' }; // FIXME: persist to database or get from firebase auth
 
   getUser(): UserProfile {
     return this.user;

@@ -1,28 +1,20 @@
 import { Component } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { UserProfile } from '@models/user-profile';
 import { UserProfileService } from '@app/user-profile/user-profile.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile-view',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './user-profile-view.component.html',
   styleUrl: './user-profile-view.component.scss',
 })
 export class UserProfileViewComponent {
   user: UserProfile = {};
 
-  constructor(private userService: UserProfileService) {}
-
-  ngOnInit(): void {
+  constructor(private userService: UserProfileService) {
     this.user = this.userService.getUser();
-  }
-
-  onSubmit(form: NgForm): void {
-    if (form.valid) {
-      this.userService.updateUser(form.value);
-      alert('Profile updated successfully!');
-    }
   }
 }
