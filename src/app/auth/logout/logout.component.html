@@ -1,1 +1,6 @@
-<button class="btn btn-primary" (click)="logOut()">Logout</button>
+<div class="logout-container">
+  <p *ngIf="logoutFailed">
+    If you're not logged out automatically, click here to log out:
+    <button class="btn btn-primary" (click)="logOut()">Logout</button>
+  </p>
+</div>

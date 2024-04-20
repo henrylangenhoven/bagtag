@@ -1,0 +1,27 @@
+.logout-container {
+  display: grid;
+  place-items: center; /* Center content horizontally and vertically */
+  height: 100%; /* Take full height of its container */
+  padding: 1em; /* Padding for internal spacing */
+  text-align: center; /* Ensure text and button are centered */
+}
+
+.logout-container p {
+  display: flex; /* Using flex inside the grid to align text and button nicely */
+  align-items: center; /* Center items vertically in the flex container */
+  justify-content: center; /* Center items horizontally */
+  gap: 0.5em; /* Space between text and button */
+}
+
+.btn {
+  padding: 0.5em 1em; /* Padding around the button text */
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white; /* Text color for the button */
+  border: none; /* Remove any default border */
+  border-radius: 0.25em; /* Rounded corners for the button */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.btn:hover {
+  background-color: #0056b3; /* Darken button on hover */
+}
