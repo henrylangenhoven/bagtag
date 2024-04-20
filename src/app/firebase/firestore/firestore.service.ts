@@ -1,45 +1,22 @@
 import { Injectable } from '@angular/core';
-import {
-  addDoc,
-  collection,
-  collectionData,
-  deleteDoc,
-  doc,
-  Firestore,
-  getDoc,
-  onSnapshot,
-  query,
-  where,
-} from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { addDoc, collection, deleteDoc, doc, Firestore, onSnapshot, query, where } from '@angular/fire/firestore';
 import { BagTagCollections } from './bagTagCollections';
 import { DocumentReference } from '@firebase/firestore';
-import { AuthService } from '@app/firebase/auth/auth.service';
-import { Observable } from 'rxjs';
 import { BagTagFirestoreDocument } from '@app/firebase/firestore/bagTagFirestoreDocument';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirestoreService {
-  constructor(
-    private firestore: Firestore,
-    private authService: AuthService
-  ) {}
+  constructor(private firestore: Firestore) {}
 
-  save(firestoreCollection: BagTagCollections = BagTagCollections.TAGS, payload: any): Promise<DocumentReference<any>> {
-    const collectionReference = collection(this.firestore, firestoreCollection); //TAGS_COLLECTION);
-    payload.ownerId = this.authService.currentUserId;
-    return addDoc(collectionReference, payload);
-  }
-
-  getCollectionData(bagTagCollection: BagTagCollections) {
-    let collectionReference = collection(this.firestore, bagTagCollection);
-    return collectionData(collectionReference, { idField: 'id' });
-  }
-
-  getCollectionDataForCurrentUser(bagTagCollection: BagTagCollections): Observable<BagTagFirestoreDocument[]> {
-    const collectionReference = collection(this.firestore, bagTagCollection);
-    const q = query(collectionReference, where('ownerId', '==', this.authService.currentUserId));
+  getCollectionDataForUser(
+    collectionPath: string = BagTagCollections.TAGS,
+    userId: string
+  ): Observable<BagTagFirestoreDocument[] | unknown> {
+    const collectionReference = collection(this.firestore, collectionPath);
+    const q = query(collectionReference, where('ownerId', '==', userId));
 
     return new Observable(observer => {
       return onSnapshot(q, snapshot => {
@@ -49,25 +26,16 @@ export class FirestoreService {
     });
   }
 
-  async getDocument(afCollection: BagTagCollections, id: string) {
-    // TODO: test and implement
-    let documentReference = doc(this.firestore, `/${afCollection}/`, id);
-    let documentSnapshot = await getDoc(documentReference);
-
-    if (documentSnapshot.exists()) {
-      let data = documentSnapshot.data();
-      console.log(data);
-    } else {
-      console.log('No such document!');
-    }
+  async save(
+    firestoreCollection: BagTagCollections = BagTagCollections.TAGS,
+    payload: BagTagFirestoreDocument
+  ): Promise<DocumentReference<BagTagFirestoreDocument>> {
+    const collectionReference = collection(this.firestore, firestoreCollection);
+    return addDoc(collectionReference, payload);
   }
 
   delete(afCollection: BagTagCollections, id: string) {
     let documentReference = doc(this.firestore, `/${afCollection}/`, id);
     return deleteDoc(documentReference);
-  }
-
-  private getCollection(bagTagCollection: BagTagCollections) {
-    return collection(this.firestore, bagTagCollection);
   }
 }
