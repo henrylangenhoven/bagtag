@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { AsyncPipe, NgForOf } from '@angular/common';
 import { QrCodeComponent } from '@utils/qr-code/qr-code/qr-code.component';
 import { TagsComponent } from './tags.component';
-import { TagService } from '@utils/tags/tag.service';
+import { TagService } from '@app/tags/tag.service';
 import { Observable, of } from 'rxjs';
 import { Tag } from '@models/tag';
 import { MockComponent } from 'ng-mocks';
