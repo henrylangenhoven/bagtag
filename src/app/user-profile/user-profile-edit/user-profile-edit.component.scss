@@ -1,0 +1,47 @@
+.edit-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two even columns */
+  gap: 20px; /* Spacious gap between rows and columns */
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.form-field {
+  display: grid;
+  grid-template-columns: max-content auto; /* Label takes up necessary space, input takes rest */
+  align-items: center;
+}
+
+label {
+  font-weight: bold;
+  padding: 10px;
+  background-color: #f2f2f2;
+  border-radius: 4px;
+}
+
+input {
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.update-btn {
+  grid-column: 1 / -1; /* Span across all columns */
+  padding: 12px 20px;
+  margin-top: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  justify-self: center;
+}
+
+.update-btn:hover {
+  background-color: #0056b3;
+}

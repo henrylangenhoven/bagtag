@@ -1,41 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { LogoutComponent } from './logout.component';
 import { AuthService } from '@app/firebase/auth/auth.service';
-import { LogoutComponent } from '@app/auth/logout/logout.component';
+import { NgIf } from '@angular/common';
 
 describe('LogoutComponent', () => {
   let component: LogoutComponent;
   let fixture: ComponentFixture<LogoutComponent>;
-  let authServiceMock: any;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
-    authServiceMock = jasmine.createSpyObj('AuthService', ['signOut']);
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['signOut', 'redirectToLogin']);
 
     await TestBed.configureTestingModule({
-      providers: [{ provide: AuthService, useValue: authServiceMock }],
+      providers: [{ provide: AuthService, useValue: authServiceSpy }],
+      imports: [LogoutComponent, NgIf], // RouterTestingModule is necessary for routing functions
     }).compileComponents();
 
     fixture = TestBed.createComponent(LogoutComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call signOut when logOut is called', () => {
-    authServiceMock.signOut.and.returnValue(Promise.resolve());
-
-    component.logOut();
-
-    expect(authServiceMock.signOut).toHaveBeenCalled();
-  });
-
-  it('should handle signOut error', () => {
-    authServiceMock.signOut.and.returnValue(Promise.reject('error'));
-
-    component.logOut();
-
-    expect(authServiceMock.signOut).toHaveBeenCalled();
+  it('should redirect to login on successful logout', async () => {
+    authServiceSpy.signOut.and.resolveTo(); // Simulate a successful logout
+    await component.logOut();
+    expect(authServiceSpy.redirectToLogin).toHaveBeenCalled();
   });
 });

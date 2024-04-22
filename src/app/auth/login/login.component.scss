@@ -1,0 +1,16 @@
+.login-container {
+  display: grid;
+  place-items: center;
+  height: 100vh; /* This makes the container take the full height of the viewport */
+  background-color: #f4f4f4; /* Just to show that the entire container covers the whole screen */
+  padding: 20px; /* Optional, for some spacing around the edges */
+}
+
+form {
+  display: grid;
+  gap: 10px; /* Spacing between form items */
+  background: white;
+  padding: 20px;
+  border-radius: 5px; /* Optional, for rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional, for a slight shadow */
+}
