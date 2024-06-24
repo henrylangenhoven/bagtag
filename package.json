@@ -13,19 +13,20 @@
     "format:src": "npx prettier --config ./.prettierrc --write ./src --check",
     "deploy": "ng deploy",
     "prepare": "husky",
-    "npm i": "npm install"
+    "npm i": "npm install",
+    "angular update": "npm install && npm audit fix && npm update && ng update"
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^17.3.5",
-    "@angular/common": "^17.3.5",
-    "@angular/compiler": "^17.3.5",
-    "@angular/core": "^17.3.5",
-    "@angular/fire": "^17.0.1",
-    "@angular/forms": "^17.3.5",
-    "@angular/platform-browser": "^17.3.5",
-    "@angular/platform-browser-dynamic": "^17.3.5",
-    "@angular/router": "^17.3.5",
+    "@angular/animations": "^18.0.4",
+    "@angular/common": "^18.0.4",
+    "@angular/compiler": "^18.0.4",
+    "@angular/core": "^18.0.4",
+    "@angular/fire": "^18.0.1",
+    "@angular/forms": "^18.0.4",
+    "@angular/platform-browser": "^18.0.4",
+    "@angular/platform-browser-dynamic": "^18.0.4",
+    "@angular/router": "^18.0.4",
     "angularx-qrcode": "^17.0.1",
     "ng-mocks": "^14.13.0",
     "rxjs": "~7.8.0",
@@ -33,9 +34,9 @@
     "zone.js": "~0.14.7"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.3.5",
-    "@angular/cli": "^17.3.5",
-    "@angular/compiler-cli": "^17.3.5",
+    "@angular-devkit/build-angular": "^18.0.5",
+    "@angular/cli": "^18.0.5",
+    "@angular/compiler-cli": "^18.0.4",
     "@types/jasmine": "~5.1.0",
     "husky": "^9.0.11",
     "jasmine-core": "~5.1.0",
@@ -50,5 +51,10 @@
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
+  },
+  "overrides": {
+    "angularx-qrcode": {
+      "@angular/core": "18.0.4"
+    }
   }
 }

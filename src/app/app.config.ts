@@ -12,10 +12,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
     provideRouter(routes),
-    importProvidersFrom([
+    [
       provideFirebaseApp(() => initializeApp(environment.firebase)),
       provideFirestore(() => getFirestore()),
       provideAuth(() => getAuth()),
-    ]),
+    ],
   ],
 };
